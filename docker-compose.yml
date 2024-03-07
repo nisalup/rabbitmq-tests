@@ -1,0 +1,13 @@
+version: '2.4'
+
+services:
+  rabbitmq:
+    image: "rabbitmq:latest"
+    ports:
+      - "5672:5672"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/mnesia/
+
+volumes:
+    mongodb:
+    rabbitmq:
