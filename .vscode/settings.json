@@ -1,0 +1,5 @@
+{
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.defaultInterpreterPath": "/Users/nisalupendra/azmed/venvs/venv310general/bin/python",
+    "terminal.integrated.fontFamily": "meslolgs nf"
+}
