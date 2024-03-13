@@ -1,7 +1,8 @@
 import aio_pika
 import asyncio
 
-QUEUE_NAMES = ["A", "B"]
+from new_task import EXCHANGE_NAME, QUEUE_NAMES
+
 
 async def callback(message: aio_pika.abc.AbstractIncomingMessage):
     origin_queue = {message.routing_key}
@@ -18,8 +19,15 @@ async def worker():
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
 
+    exchange = await channel.declare_exchange(
+        EXCHANGE_NAME,
+        durable=True,
+        auto_delete=False
+    )
+
     for queue_name in QUEUE_NAMES:
         locals()[f'queue_{queue_name}'] = await channel.declare_queue(queue_name, durable=True, auto_delete=False)
+        await locals()[f'queue_{queue_name}'].bind(exchange, routing_key=queue_name)
         await locals()[f'queue_{queue_name}'].consume(callback)
         print(f"{queue_name} [*] Waiting for messages. To exit press CTRL+C")
 
